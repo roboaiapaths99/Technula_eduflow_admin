@@ -2,17 +2,17 @@
  * Technula EduFlow — Unified API Service Client.
  */
 export const API_BASE = (() => {
-  if (import.meta.env.VITE_API_BASE) {
+  if (import.meta.env.VITE_API_BASE && import.meta.env.VITE_API_BASE.trim() !== '') {
     return import.meta.env.VITE_API_BASE.replace(/\/+$/, '');
   }
   if (typeof window !== 'undefined') {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      return 'http://localhost:8000';
+      return 'http://localhost:8087';
     }
     // In production, when served behind Nginx reverse proxy on https://eduflow.technula.com
     return `${window.location.protocol}//${window.location.host}/api`;
   }
-  return 'http://localhost:8000';
+  return 'http://localhost:8087';
 })();
 
 export function getToken() {
