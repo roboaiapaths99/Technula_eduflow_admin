@@ -1,0 +1,16 @@
+{
+  "short_name": "Insights PWA",
+  "name": "Academic Insights AI - Teacher & Admin Portal",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#0A2540",
+  "display": "standalone",
+  "orientation": "portrait-primary"
+}
