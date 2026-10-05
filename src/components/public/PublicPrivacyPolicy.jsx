@@ -116,7 +116,7 @@ export default function PublicPrivacyPolicy() {
         </p>
         <ol style={{ paddingLeft: '20px', color: '#7c2d12' }}>
           <li style={{ marginBottom: '6px' }}>Inside the mobile app, tap <strong>Menu → Guardian Profile → Delete Account & Data</strong>.</li>
-          <li style={{ marginBottom: '6px' }}>Or submit a deletion request by emailing <strong>privacy@technula.com</strong> with your registered mobile number and school name.</li>
+          <li style={{ marginBottom: '6px' }}>Or submit a deletion request by emailing <strong>sales@technula.com</strong> with your registered mobile number and school name.</li>
         </ol>
         <p style={{ color: '#7c2d12', fontSize: '13px', margin: '12px 0 0 0' }}>
           * Upon verification, all user credentials, sessions, and device tokens will be permanently deleted within 30 days. Statutory student academic archives (such as official board results and fee financial audits) are preserved as legally mandated by local educational regulatory frameworks.
@@ -131,7 +131,7 @@ export default function PublicPrivacyPolicy() {
         </p>
         <p style={{ color: '#0f172a', fontWeight: '600', fontSize: '14px' }}>
           Technula EduFlow Data Privacy Office<br />
-          Email: <a href="mailto:privacy@technula.com" style={{ color: '#2563eb' }}>privacy@technula.com</a> / <a href="mailto:admin@technula.com" style={{ color: '#2563eb' }}>admin@technula.com</a><br />
+          Email: <a href="mailto:sales@technula.com" style={{ color: '#2563eb' }}>sales@technula.com</a> / <a href="mailto:admin@technula.com" style={{ color: '#2563eb' }}>admin@technula.com</a><br />
           Website: <a href="https://technulaeduflow.technula.com" style={{ color: '#2563eb' }}>https://technulaeduflow.technula.com</a>
         </p>
       </section>
