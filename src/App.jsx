@@ -18,11 +18,19 @@ import PTCManager from './components/admin/PTCManager';
 import GateSecurityScanner from './components/security/GateSecurityScanner';
 import { Calendar, CheckSquare, AlertTriangle, MessageSquare, Megaphone, Smartphone, ArrowLeft } from 'lucide-react';
 
+import PublicPrivacyPolicy from './components/public/PublicPrivacyPolicy';
+
 export default function App() {
   const [user, setUser] = useState(getUser());
   const [activeTab, setActiveTab] = useState('default');
   const [selectedReportCard, setSelectedReportCard] = useState(null);
   const [originalSuperAdmin, setOriginalSuperAdmin] = useState(null);
+
+  // Public Privacy & Data Deletion Route (Google Play Store verification compliance)
+  const currentPath = (window.location.pathname || '').toLowerCase();
+  if (currentPath === '/privacy' || currentPath === '/privacy-policy' || currentPath === '/data-deletion' || window.location.search.includes('tab=privacy')) {
+    return <PublicPrivacyPolicy />;
+  }
 
   // Set default tab based on role
   useEffect(() => {
