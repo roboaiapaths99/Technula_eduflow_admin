@@ -62,74 +62,63 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, unread
       </div>
 
       {/* Navigation Tabs (Desktop) */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }} className="desktop-nav">
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '3px', background: '#f8fafc', padding: '4px 6px', borderRadius: '12px', border: '1px solid #e2e8f0' }} className="desktop-nav">
         {isSuperAdmin && (
-          <>
-            <button
-              onClick={() => setActiveTab('superadmin_overview')}
-              className={activeTab === 'superadmin_overview' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <Building2 size={15} /> SaaS Command Center
-            </button>
-          </>
+          <button
+            onClick={() => setActiveTab('superadmin_overview')}
+            className={`nav-tab-item ${activeTab === 'superadmin_overview' ? 'active' : ''}`}
+          >
+            <Building2 size={15} /> SaaS Command Center
+          </button>
         )}
 
         {isAdmin && !isSuperAdmin && (
           <>
             <button
               onClick={() => setActiveTab('admin_overview')}
-              className={activeTab === 'admin_overview' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'admin_overview' ? 'active' : ''}`}
             >
               Admin Dashboard
             </button>
             <button
               onClick={() => setActiveTab('risk_cases')}
-              className={activeTab === 'risk_cases' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'risk_cases' ? 'active' : ''}`}
             >
               Risk Center
             </button>
             <button
               onClick={() => setActiveTab('exam_sheets')}
-              className={activeTab === 'exam_sheets' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'exam_sheets' ? 'active' : ''}`}
             >
               Exam Sheets
             </button>
             <button
               onClick={() => setActiveTab('certificates')}
-              className={activeTab === 'certificates' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'certificates' ? 'active' : ''}`}
             >
               Certificates & TC
             </button>
             <button
               onClick={() => setActiveTab('ptc_admin')}
-              className={activeTab === 'ptc_admin' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'ptc_admin' ? 'active' : ''}`}
             >
               PTC Meetings
             </button>
             <button
               onClick={() => setActiveTab('tickets')}
-              className={activeTab === 'tickets' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'tickets' ? 'active' : ''}`}
             >
               Support Tickets
             </button>
             <button
               onClick={() => setActiveTab('announcements')}
-              className={activeTab === 'announcements' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'announcements' ? 'active' : ''}`}
             >
               Notices
             </button>
             <button
               onClick={() => setActiveTab('gate_scanner')}
-              className={activeTab === 'gate_scanner' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'gate_scanner' ? 'active' : ''}`}
             >
               Gate Scanner
             </button>
@@ -139,10 +128,9 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, unread
         {['security', 'gatestaff'].includes(roleLower) && (
           <button
             onClick={() => setActiveTab('gate_scanner')}
-            className={activeTab === 'gate_scanner' ? 'btn-primary' : 'btn-secondary'}
-            style={{ fontSize: '13px', padding: '7px 12px' }}
+            className={`nav-tab-item ${activeTab === 'gate_scanner' ? 'active' : ''}`}
           >
-            🛡️ Gate Scanner
+            <QrCode size={15} /> Gate Scanner
           </button>
         )}
 
@@ -150,43 +138,37 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, unread
           <>
             <button
               onClick={() => setActiveTab('teacher_attendance')}
-              className={activeTab === 'teacher_attendance' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'teacher_attendance' ? 'active' : ''}`}
             >
               Daily Attendance
             </button>
             <button
               onClick={() => setActiveTab('teacher_marks')}
-              className={activeTab === 'teacher_marks' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'teacher_marks' ? 'active' : ''}`}
             >
               Marks & Feedback
             </button>
             <button
               onClick={() => setActiveTab('exam_sheets')}
-              className={activeTab === 'exam_sheets' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'exam_sheets' ? 'active' : ''}`}
             >
-              🔒 Scan Sheets
+              Scan Sheets
             </button>
             <button
               onClick={() => setActiveTab('ptc_admin')}
-              className={activeTab === 'ptc_admin' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'ptc_admin' ? 'active' : ''}`}
             >
-              🤝 PTC Schedule
+              PTC Schedule
             </button>
             <button
               onClick={() => setActiveTab('risk_cases')}
-              className={activeTab === 'risk_cases' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'risk_cases' ? 'active' : ''}`}
             >
               Risk Cases
             </button>
             <button
               onClick={() => setActiveTab('announcements')}
-              className={activeTab === 'announcements' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 12px' }}
+              className={`nav-tab-item ${activeTab === 'announcements' ? 'active' : ''}`}
             >
               Notices
             </button>
@@ -197,22 +179,19 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, unread
           <>
             <button
               onClick={() => setActiveTab('parent_portal')}
-              className={activeTab === 'parent_portal' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px' }}
+              className={`nav-tab-item ${activeTab === 'parent_portal' ? 'active' : ''}`}
             >
               Parent Portal
             </button>
             <button
               onClick={() => setActiveTab('announcements')}
-              className={activeTab === 'announcements' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px' }}
+              className={`nav-tab-item ${activeTab === 'announcements' ? 'active' : ''}`}
             >
               School Notices
             </button>
             <button
               onClick={() => setActiveTab('tickets')}
-              className={activeTab === 'tickets' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              className={`nav-tab-item ${activeTab === 'tickets' ? 'active' : ''}`}
             >
               <Ticket size={14} /> Helpdesk Tickets
             </button>
@@ -223,15 +202,13 @@ export default function Navbar({ user, onLogout, activeTab, setActiveTab, unread
           <>
             <button
               onClick={() => setActiveTab('student_portal')}
-              className={activeTab === 'student_portal' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px' }}
+              className={`nav-tab-item ${activeTab === 'student_portal' ? 'active' : ''}`}
             >
               Student Portal
             </button>
             <button
               onClick={() => setActiveTab('announcements')}
-              className={activeTab === 'announcements' ? 'btn-primary' : 'btn-secondary'}
-              style={{ fontSize: '13px', padding: '7px 14px' }}
+              className={`nav-tab-item ${activeTab === 'announcements' ? 'active' : ''}`}
             >
               Announcements
             </button>

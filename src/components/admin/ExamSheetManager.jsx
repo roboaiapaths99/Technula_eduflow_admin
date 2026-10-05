@@ -128,53 +128,59 @@ export default function ExamSheetManager({ user }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '24px' }}>
         {/* Upload Form */}
-        <div className="tech-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)' }}>
-            Upload & Encrypt Answer Sheet
-          </h3>
+        <div className="tech-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+              Upload & Encrypt Answer Sheet
+            </h3>
+            <span className="pill pill-indigo" style={{ fontSize: '11px' }}>
+              AES-256
+            </span>
+          </div>
 
           {/* Student Selector */}
-          <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-            Select Student *
-          </label>
-          <select
-            value={selectedStudentId}
-            onChange={(e) => setSelectedStudentId(e.target.value)}
-            className="tech-input"
-            style={{ width: '100%', marginBottom: '14px' }}
-          >
-            {students.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} ({s.admission_no || `Roll ${s.roll_no}`}) — Class {s.grade}-{s.section}
-              </option>
-            ))}
-          </select>
+          <div style={{ marginBottom: '14px' }}>
+            <label className="form-label">
+              Select Student *
+            </label>
+            <select
+              value={selectedStudentId}
+              onChange={(e) => setSelectedStudentId(e.target.value)}
+              className="form-input"
+            >
+              {students.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name} ({s.admission_no || `Roll ${s.roll_no}`}) — Class {s.grade}-{s.section}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Exam & Subject */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+              <label className="form-label">
                 Subject *
               </label>
               <input
                 type="text"
                 value={subjectName}
                 onChange={(e) => setSubjectName(e.target.value)}
-                className="tech-input"
-                style={{ width: '100%' }}
+                className="form-input"
+                placeholder="e.g. Mathematics"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+              <label className="form-label">
                 Examination *
               </label>
               <input
                 type="text"
                 value={examName}
                 onChange={(e) => setExamName(e.target.value)}
-                className="tech-input"
-                style={{ width: '100%' }}
+                className="form-input"
+                placeholder="e.g. Pre-Board Examination"
               />
             </div>
           </div>
@@ -182,61 +188,79 @@ export default function ExamSheetManager({ user }) {
           {/* Marks Awarded */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+              <label className="form-label">
                 Marks Awarded
               </label>
               <input
                 type="number"
                 value={marksAwarded}
                 onChange={(e) => setMarksAwarded(e.target.value)}
-                className="tech-input"
-                style={{ width: '100%' }}
+                className="form-input"
+                placeholder="e.g. 91"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
+              <label className="form-label">
                 Max Marks
               </label>
               <input
                 type="number"
                 value={maxMarks}
                 onChange={(e) => setMaxMarks(e.target.value)}
-                className="tech-input"
-                style={{ width: '100%' }}
+                className="form-input"
+                placeholder="e.g. 100"
               />
             </div>
           </div>
 
           {/* Teacher Notes */}
-          <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-            Teacher Feedback on Answer Sheet
-          </label>
-          <input
-            type="text"
-            value={teacherNotes}
-            onChange={(e) => setTeacherNotes(e.target.value)}
-            placeholder="e.g. Excellent presentation in Q3-Q5; practice step-marking in calculus..."
-            className="tech-input"
-            style={{ width: '100%', marginBottom: '16px' }}
-          />
+          <div style={{ marginBottom: '16px' }}>
+            <label className="form-label">
+              Teacher Feedback on Answer Sheet
+            </label>
+            <input
+              type="text"
+              value={teacherNotes}
+              onChange={(e) => setTeacherNotes(e.target.value)}
+              placeholder="e.g. Excellent presentation in Q3-Q5; practice step-marking in calculus..."
+              className="form-input"
+            />
+          </div>
 
-          {/* File Picker */}
-          <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>
-            Scanned Paper File (JPG, PNG, PDF) *
-          </label>
-          <input
-            type="file"
-            accept="image/*,application/pdf"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
-            style={{ marginBottom: '16px', fontSize: '13px' }}
-          />
+          {/* File Picker Custom Dropzone */}
+          <div style={{ marginBottom: '18px' }}>
+            <label className="form-label">
+              Scanned Paper File (JPG, PNG, PDF) *
+            </label>
+            <label className="file-dropzone">
+              <input
+                type="file"
+                accept="image/*,application/pdf"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+                style={{ display: 'none' }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: selectedFile ? '#ecfdf5' : '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {selectedFile ? <CheckCircle2 size={20} color="#059669" /> : <Upload size={20} color="#4f46e5" />}
+                </div>
+                <div>
+                  <div style={{ fontSize: '13.5px', fontWeight: 700, color: selectedFile ? '#059669' : 'var(--primary)' }}>
+                    {selectedFile ? selectedFile.name : 'Click to browse or drop scanned paper'}
+                  </div>
+                  <div style={{ fontSize: '11.5px', color: '#94a3b8', marginTop: '2px' }}>
+                    {selectedFile ? `${(selectedFile.size / 1024).toFixed(1)} KB selected` : 'Supports JPG, PNG, PDF (Up to 25MB)'}
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
 
           <button
             onClick={() => handleUpload(false)}
             disabled={uploading || !selectedFile}
             className="btn-primary"
-            style={{ width: '100%', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            style={{ width: '100%', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: uploading || !selectedFile ? 0.6 : 1 }}
           >
             {uploading ? (
               'Scanning OCR & Encrypting...'

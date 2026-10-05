@@ -89,11 +89,29 @@ button, input, select, textarea {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  padding: 24px;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tech-card:hover {
   box-shadow: var(--shadow-lg);
+}
+
+/* Modern Metric / KPI Card */
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
 /* Interactive Button Styles */
@@ -104,19 +122,19 @@ button, input, select, textarea {
   padding: 10px 20px;
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13.5px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(99, 91, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(99, 91, 255, 0.25);
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--primary-hover) 0%, #3730a3 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(99, 91, 255, 0.4);
+  box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35);
 }
 
 .btn-secondary {
@@ -126,7 +144,7 @@ button, input, select, textarea {
   padding: 9px 18px;
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13.5px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -137,6 +155,52 @@ button, input, select, textarea {
 .btn-secondary:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
+}
+
+/* Modern Nav Tab */
+.nav-tab-item {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #64748b;
+  transition: all 0.16s ease;
+  white-space: nowrap;
+}
+
+.nav-tab-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.nav-tab-item.active {
+  background: #4f46e5;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.28);
+}
+
+/* Custom File Upload Dropzone */
+.file-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 24px 18px;
+  text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.file-dropzone:hover {
+  border-color: var(--primary);
+  background: #f5f3ff;
 }
 
 /* Badge Pills */
@@ -155,23 +219,60 @@ button, input, select, textarea {
 .pill-emerald { background: var(--accent-emerald-light); color: var(--accent-emerald); }
 .pill-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
 .pill-rose { background: var(--accent-rose-light); color: var(--accent-rose); }
+.pill-indigo { background: #EEF2FF; color: #4F46E5; }
 
-/* Form Controls */
-.form-input {
+/* Form Controls & Inputs */
+.form-input, .tech-input, select.form-input, select.tech-input, textarea.form-input, textarea.tech-input {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid var(--border-color);
+  border: 1px solid #cbd5e1;
   border-radius: var(--radius-md);
-  font-size: 14px;
+  font-size: 13.5px;
   background: #ffffff;
   color: var(--text-primary);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
 }
 
-.form-input:focus {
+.form-input:focus, .tech-input:focus, select.form-input:focus, select.tech-input:focus, textarea.form-input:focus, textarea.tech-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.02em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Filter Pill Group */
+.filter-pill {
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill:hover {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+.filter-pill.active {
+  background: var(--primary);
+  color: #ffffff;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.15);
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.25);
 }
 
 /* Modern Data Table */

@@ -109,56 +109,91 @@ export default function RiskCenter({ user }) {
 
       {/* KPI Heatmap Summary Bar */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div className="tech-card" style={{ borderLeft: '4px solid var(--accent-rose)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--accent-rose)' }}>CRITICAL RISK</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px' }}>{summary.CRITICAL} Students</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Score &lt; 50% or Attendance &lt; 75%</div>
+        <div className="kpi-card" style={{ borderTop: '4px solid #ef4444' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#dc2626', letterSpacing: '0.05em' }}>
+              CRITICAL RISK
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ShieldAlert size={16} color="#dc2626" />
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {summary.CRITICAL} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Students</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            Score &lt; 50% or Attendance &lt; 75%
+          </div>
         </div>
 
-        <div className="tech-card" style={{ borderLeft: '4px solid #F59E0B' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: '#D97706' }}>HIGH VULNERABILITY</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px' }}>{summary.HIGH} Students</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Negative velocity &gt; 10% dip</div>
+        <div className="kpi-card" style={{ borderTop: '4px solid #f59e0b' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#d97706', letterSpacing: '0.05em' }}>
+              HIGH VULNERABILITY
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <AlertTriangle size={16} color="#d97706" />
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {summary.HIGH} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Students</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            Negative velocity &gt; 10% dip
+          </div>
         </div>
 
-        <div className="tech-card" style={{ borderLeft: '4px solid #3B82F6' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: '#2563EB' }}>MODERATE ATTENTION</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px' }}>{summary.MEDIUM} Students</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Single subject warning flags</div>
+        <div className="kpi-card" style={{ borderTop: '4px solid #3b82f6' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#2563eb', letterSpacing: '0.05em' }}>
+              MODERATE ATTENTION
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <AlertCircle size={16} color="#2563eb" />
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {summary.MEDIUM} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Students</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            Single subject warning flags
+          </div>
         </div>
 
-        <div className="tech-card" style={{ borderLeft: '4px solid var(--accent-emerald)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--accent-emerald)' }}>ON TRACK / SAFE</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px' }}>{summary.SAFE} Students</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Consistent academic trajectory</div>
+        <div className="kpi-card" style={{ borderTop: '4px solid #10b981' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', letterSpacing: '0.05em' }}>
+              ON TRACK / SAFE
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CheckCircle2 size={16} color="#059669" />
+            </div>
+          </div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {summary.SAFE} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Students</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            Consistent academic trajectory
+          </div>
         </div>
       </div>
 
       {/* Main Grid: Student List on Left, AI Remediation Profile on Right */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '24px' }}>
         {/* Left Column: Filterable Student Matrix */}
-        <div className="tech-card" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)' }}>
+        <div className="tech-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
               Students Requiring Support ({filteredStudents.length})
             </h3>
 
             {/* Severity Filter */}
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '5px' }}>
               {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'SAFE'].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setFilterSeverity(lvl)}
-                  style={{
-                    border: '1px solid var(--border-color)',
-                    background: filterSeverity === lvl ? 'var(--primary)' : '#ffffff',
-                    color: filterSeverity === lvl ? '#ffffff' : 'var(--text-secondary)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    padding: '4px 8px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                  }}
+                  className={`filter-pill ${filterSeverity === lvl ? 'active' : ''}`}
                 >
                   {lvl}
                 </button>

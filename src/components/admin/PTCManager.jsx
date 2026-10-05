@@ -110,30 +110,55 @@ export default function PTCManager({ user }) {
 
       {/* Overview Metric Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div className="tech-card">
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-muted)' }}>TOTAL SESSIONS GENERATED</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px', color: 'var(--primary)' }}>
-            {slots.length} Slots
+        <div className="kpi-card" style={{ borderTop: '4px solid #4f46e5' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#4f46e5', letterSpacing: '0.05em' }}>
+              TOTAL SESSIONS GENERATED
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Calendar size={16} color="#4f46e5" />
+            </div>
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>15-minute consultations</div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {slots.length} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Slots</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            15-minute consultations
+          </div>
         </div>
 
-        <div className="tech-card">
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--accent-emerald)' }}>BOOKED BY PARENTS</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px', color: 'var(--accent-emerald)' }}>
-            {bookedSlots.length} Booked
+        <div className="kpi-card" style={{ borderTop: '4px solid #10b981' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#059669', letterSpacing: '0.05em' }}>
+              BOOKED BY PARENTS
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Users size={16} color="#059669" />
+            </div>
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {bookedSlots.length} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Booked</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
             {slots.length > 0 ? `${((bookedSlots.length / slots.length) * 100).toFixed(0)}% utilization` : '0%'}
           </div>
         </div>
 
-        <div className="tech-card">
-          <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-secondary)' }}>AVAILABLE OPEN SLOTS</div>
-          <div style={{ fontSize: '28px', fontWeight: 900, marginTop: '4px', color: '#64748B' }}>
-            {availableSlots.length} Open
+        <div className="kpi-card" style={{ borderTop: '4px solid #3b82f6' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#2563eb', letterSpacing: '0.05em' }}>
+              AVAILABLE OPEN SLOTS
+            </span>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Clock size={16} color="#2563eb" />
+            </div>
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Ready for parent selection</div>
+          <div style={{ fontSize: '26px', fontWeight: 900, marginTop: '8px', color: '#0f172a', letterSpacing: '-0.02em' }}>
+            {availableSlots.length} <span style={{ fontSize: '14px', fontWeight: 600, color: '#64748b' }}>Open</span>
+          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+            Ready for parent selection
+          </div>
         </div>
       </div>
 
