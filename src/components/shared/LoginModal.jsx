@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { api, setToken, setUser } from '../../api';
 import { Shield, Sparkles, School, Lock, Mail, ArrowRight, UserCheck, Building2, Phone, MapPin, CheckCircle2, Globe, X, Search, ChevronDown, Check } from 'lucide-react';
 
-export default function LoginModal({ onLoginSuccess }) {
+export default function LoginModal({ onLoginSuccess, onOpenPrivacy }) {
   const [mode, setMode] = useState('login'); // 'login' | 'register_school'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -1149,6 +1149,24 @@ export default function LoginModal({ onLoginSuccess }) {
 
         <div style={{ textAlign: 'center', marginTop: '18px', fontSize: '12px', color: 'var(--text-muted)' }}>
           Technula EduFlow • Enterprise Cloud Architecture • Multi-Tenant School OS
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '12px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', fontSize: '12px' }}>
+          <button
+            type="button"
+            onClick={onOpenPrivacy || (() => { window.location.href = '/privacy'; })}
+            style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: '700', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+          >
+            🔒 Privacy Policy
+          </button>
+          <span style={{ color: '#cbd5e1' }}>•</span>
+          <button
+            type="button"
+            onClick={onOpenPrivacy || (() => { window.location.href = '/data-deletion'; })}
+            style={{ background: 'none', border: 'none', color: '#64748b', fontWeight: '600', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+          >
+            🗑️ Data Safety & Deletion
+          </button>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '10px' }}>

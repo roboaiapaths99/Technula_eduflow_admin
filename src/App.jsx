@@ -27,9 +27,22 @@ export default function App() {
   const [originalSuperAdmin, setOriginalSuperAdmin] = useState(null);
 
   // Public Privacy & Data Deletion Route (Google Play Store verification compliance)
-  const currentPath = (window.location.pathname || '').toLowerCase();
-  if (currentPath === '/privacy' || currentPath === '/privacy-policy' || currentPath === '/data-deletion' || window.location.search.includes('tab=privacy')) {
-    return <PublicPrivacyPolicy />;
+  const [viewingPrivacy, setViewingPrivacy] = useState(() => {
+    const p = (window.location.pathname || '').toLowerCase();
+    const s = (window.location.search || '').toLowerCase();
+    const h = (window.location.hash || '').toLowerCase();
+    return p.includes('privacy') || p.includes('data-deletion') || s.includes('privacy') || h.includes('privacy');
+  });
+
+  if (viewingPrivacy) {
+    return (
+      <PublicPrivacyPolicy
+        onBack={() => {
+          setViewingPrivacy(false);
+          window.history.pushState({}, '', '/');
+        }}
+      />
+    );
   }
 
   // Set default tab based on role
@@ -79,7 +92,7 @@ export default function App() {
   };
 
   if (!user || !getToken()) {
-    return <LoginModal onLoginSuccess={(u) => setUser(u)} />;
+    return <LoginModal onLoginSuccess={(u) => setUser(u)} onOpenPrivacy={() => setViewingPrivacy(true)} />;
   }
 
   if (user && user.must_reset_password) {
