@@ -110,7 +110,7 @@ export default function StudentPortal({ user, onOpenReportCard }) {
               </span>
             </div>
             <p style={{ margin: '6px 0 0 0', opacity: 0.9, fontSize: '14px' }}>
-              {user?.school_name || 'Academic Insights School'} • Admission No: <strong>{user?.admission_no || 'N/A'}</strong> • Roll No: <strong>{user?.roll_no || '-'}</strong>
+              {user?.school_name || 'Technula EduFlow'} • Admission No: <strong>{user?.admission_no || 'N/A'}</strong> • Roll No: <strong>{user?.roll_no || '-'}</strong>
             </p>
           </div>
         </div>

@@ -164,7 +164,7 @@ export default function GateSecurityScanner({ user, onLogout }) {
               Campus Security & Access Control
             </div>
             <h1 style={{ fontSize: '20px', fontWeight: 800, margin: 0, color: '#fff' }}>
-              {user?.school_name || 'Academic Insights'} Gate Station
+              {user?.school_name || 'Technula EduFlow'} Gate Station
             </h1>
           </div>
         </div>

@@ -142,7 +142,7 @@ export default function TeacherGallery({ user, grade, section }) {
       await api.deletePhotoFromAlbum?.(selectedAlbum.id, photoId) ||
         fetch(`${api.API_BASE || 'http://localhost:8000'}/gallery/albums/${selectedAlbum.id}/photos/${photoId}`, {
           method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('insights_token')}` }
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('technulaeduflow_token')}` }
         });
       loadAlbumDetail(selectedAlbum.id);
     } catch (err) {

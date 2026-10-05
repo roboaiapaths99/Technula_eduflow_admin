@@ -16,27 +16,27 @@ export const API_BASE = (() => {
 })();
 
 export function getToken() {
-  return localStorage.getItem('insights_token');
+  return localStorage.getItem('technulaeduflow_token');
 }
 
 export function setToken(token) {
-  if (token) localStorage.setItem('insights_token', token);
-  else localStorage.removeItem('insights_token');
+  if (token) localStorage.setItem('technulaeduflow_token', token);
+  else localStorage.removeItem('technulaeduflow_token');
 }
 
 export function getUser() {
-  const u = localStorage.getItem('insights_user');
+  const u = localStorage.getItem('technulaeduflow_user');
   return u ? JSON.parse(u) : null;
 }
 
 export function setUser(user) {
-  if (user) localStorage.setItem('insights_user', JSON.stringify(user));
-  else localStorage.removeItem('insights_user');
+  if (user) localStorage.setItem('technulaeduflow_user', JSON.stringify(user));
+  else localStorage.removeItem('technulaeduflow_user');
 }
 
 export function logout() {
-  localStorage.removeItem('insights_token');
-  localStorage.removeItem('insights_user');
+  localStorage.removeItem('technulaeduflow_token');
+  localStorage.removeItem('technulaeduflow_user');
 }
 
 /**

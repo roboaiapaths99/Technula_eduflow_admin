@@ -23,7 +23,7 @@ export default function TeacherGatePass({ user, grade, section }) {
       const data = await api.getTeacherClassGatePasses?.(grade, section) ||
         await (async () => {
           const res = await fetch(`${api.API_BASE || 'http://localhost:8000'}/gate-passes/teacher/class?grade=${grade}&section=${section}`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('insights_token')}` }
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('technulaeduflow_token')}` }
           });
           return res.json();
         })();
