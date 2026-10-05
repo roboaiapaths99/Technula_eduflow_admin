@@ -132,7 +132,7 @@ export default function PublicPrivacyPolicy() {
         <p style={{ color: '#0f172a', fontWeight: '600', fontSize: '14px' }}>
           Technula EduFlow Data Privacy Office<br />
           Email: <a href="mailto:privacy@technula.com" style={{ color: '#2563eb' }}>privacy@technula.com</a> / <a href="mailto:admin@technula.com" style={{ color: '#2563eb' }}>admin@technula.com</a><br />
-          Website: <a href="https://eduflow.technula.com" style={{ color: '#2563eb' }}>https://eduflow.technula.com</a>
+          Website: <a href="https://technulaeduflow.technula.com" style={{ color: '#2563eb' }}>https://technulaeduflow.technula.com</a>
         </p>
       </section>
     </div>
