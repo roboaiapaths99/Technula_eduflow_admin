@@ -21,6 +21,8 @@ import { Calendar, CheckSquare, AlertTriangle, MessageSquare, Megaphone, Smartph
 import PublicPrivacyPolicy from './components/public/PublicPrivacyPolicy';
 
 export default function App() {
+  const [user, setUser] = useState(getUser());
+
   const getDefaultTabForRole = (role) => {
     const r = (role || '').toLowerCase();
     if (r === 'superadmin') return 'superadmin_overview';
