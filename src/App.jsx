@@ -21,8 +21,44 @@ import { Calendar, CheckSquare, AlertTriangle, MessageSquare, Megaphone, Smartph
 import PublicPrivacyPolicy from './components/public/PublicPrivacyPolicy';
 
 export default function App() {
-  const [user, setUser] = useState(getUser());
-  const [activeTab, setActiveTab] = useState('default');
+  const getDefaultTabForRole = (role) => {
+    const r = (role || '').toLowerCase();
+    if (r === 'superadmin') return 'superadmin_overview';
+    if (r.includes('teacher')) return 'teacher_attendance';
+    if (r === 'admin' || r === 'principal' || r === 'vice_principal' || r === 'staff' || r === 'accountant') return 'admin_overview';
+    if (r === 'parent') return 'parent_portal';
+    if (r === 'student') return 'student_portal';
+    if (['security', 'gatestaff'].includes(r)) return 'gate_scanner';
+    return 'announcements';
+  };
+
+  const getValidTabsForRole = (role) => {
+    const r = (role || '').toLowerCase();
+    if (r === 'superadmin') return ['superadmin_overview'];
+    if (r.includes('teacher')) return ['teacher_attendance', 'teacher_marks', 'exam_sheets', 'ptc_admin', 'risk_cases', 'announcements'];
+    if (r === 'admin' || r === 'principal' || r === 'vice_principal' || r === 'staff' || r === 'accountant') {
+      return ['admin_overview', 'risk_cases', 'exam_sheets', 'certificates', 'ptc_admin', 'tickets', 'announcements', 'gate_scanner'];
+    }
+    if (r === 'parent') return ['parent_portal', 'announcements', 'tickets'];
+    if (r === 'student') return ['student_portal', 'announcements'];
+    if (['security', 'gatestaff'].includes(r)) return ['gate_scanner'];
+    return ['announcements'];
+  };
+
+  const [activeTab, setActiveTabRaw] = useState(() => {
+    const hash = (window.location.hash || '').replace('#', '').trim();
+    const saved = localStorage.getItem('eduflow_active_tab');
+    return hash || saved || 'default';
+  });
+
+  const setActiveTab = (tab) => {
+    setActiveTabRaw(tab);
+    try {
+      localStorage.setItem('eduflow_active_tab', tab);
+      window.history.replaceState(null, '', `#${tab}`);
+    } catch (e) {}
+  };
+
   const [selectedReportCard, setSelectedReportCard] = useState(null);
   const [originalSuperAdmin, setOriginalSuperAdmin] = useState(null);
 
@@ -45,29 +81,36 @@ export default function App() {
     );
   }
 
-  // Set default tab based on role
+  // Restore and validate active tab based on role and stored session
   useEffect(() => {
     if (!user) return;
     const role = (user.role || '').toLowerCase();
-    if (role === 'superadmin') {
-      setActiveTab('superadmin_overview');
-    } else if (role.includes('teacher')) {
-      setActiveTab('teacher_attendance');
-    } else if (role === 'admin' || role === 'principal' || role === 'vice_principal' || role === 'staff' || role === 'accountant') {
-      setActiveTab('admin_overview');
-    } else if (role === 'parent') {
-      setActiveTab('parent_portal');
-    } else if (role === 'student') {
-      setActiveTab('student_portal');
-    } else if (['security', 'gatestaff'].includes(role)) {
-      setActiveTab('gate_scanner');
+    const defaultTab = getDefaultTabForRole(role);
+    const validTabs = getValidTabsForRole(role);
+
+    const hash = (window.location.hash || '').replace('#', '').trim();
+    const saved = localStorage.getItem('eduflow_active_tab');
+    const candidate = hash || saved || activeTab;
+
+    if (candidate && validTabs.includes(candidate)) {
+      setActiveTabRaw(candidate);
+      try {
+        localStorage.setItem('eduflow_active_tab', candidate);
+        window.history.replaceState(null, '', `#${candidate}`);
+      } catch (e) {}
     } else {
-      setActiveTab('announcements');
+      setActiveTab(defaultTab);
     }
   }, [user]);
 
   const handleLogout = () => {
     logout();
+    try {
+      localStorage.removeItem('eduflow_active_tab');
+      localStorage.removeItem('eduflow_admin_tab');
+      localStorage.removeItem('eduflow_fees_subtab');
+      window.history.replaceState(null, '', window.location.pathname);
+    } catch (e) {}
     setUser(null);
     setOriginalSuperAdmin(null);
   };

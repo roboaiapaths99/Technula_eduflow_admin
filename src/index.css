@@ -222,7 +222,7 @@ button, input, select, textarea {
 .pill-indigo { background: #EEF2FF; color: #4F46E5; }
 
 /* Form Controls & Inputs */
-.form-input, .tech-input, select.form-input, select.tech-input, textarea.form-input, textarea.tech-input {
+.form-input, .tech-input, .input-field, select.form-input, select.tech-input, select.input-field, textarea.form-input, textarea.tech-input, textarea.input-field {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid #cbd5e1;
@@ -236,7 +236,7 @@ button, input, select, textarea {
   font-family: inherit;
 }
 
-.form-input:focus, .tech-input:focus, select.form-input:focus, select.tech-input:focus, textarea.form-input:focus, textarea.tech-input:focus {
+.form-input:focus, .tech-input:focus, .input-field:focus, select.form-input:focus, select.tech-input:focus, select.input-field:focus, textarea.form-input:focus, textarea.tech-input:focus, textarea.input-field:focus {
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
 }

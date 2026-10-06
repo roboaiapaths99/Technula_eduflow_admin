@@ -21,7 +21,16 @@ const STANDARD_FEE_HEADS = [
 const GRADE_OPTIONS = ['Nursery', 'LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 export default function FeeManager({ schoolId, students = [] }) {
-  const [subTab, setSubTab] = useState('overview'); // 'overview' | 'collect' | 'structures' | 'config'
+  const [subTab, setSubTabRaw] = useState(() => {
+    return localStorage.getItem('eduflow_fees_subtab') || 'overview';
+  });
+
+  const setSubTab = (tab) => {
+    setSubTabRaw(tab);
+    try {
+      localStorage.setItem('eduflow_fees_subtab', tab);
+    } catch (e) {}
+  };
   const [overview, setOverview] = useState(null);
   const [structures, setStructures] = useState([]);
   const [config, setConfig] = useState(null);
@@ -464,7 +473,17 @@ export default function FeeManager({ schoolId, students = [] }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Sub-tab Navigation */}
-      <div style={{ display: 'flex', gap: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', flexWrap: 'wrap' }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        background: '#f8fafc',
+        padding: '4px 6px',
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        width: 'fit-content',
+        marginBottom: '4px'
+      }}>
         {[
           { id: 'overview', label: 'Financial Overview & Receipts', icon: <DollarSign size={15} /> },
           { id: 'collect', label: 'Cashier POS Counter Desk', icon: <Receipt size={15} /> },
@@ -474,8 +493,7 @@ export default function FeeManager({ schoolId, students = [] }) {
           <button
             key={tab.id}
             onClick={() => { setSubTab(tab.id); setMessage(null); setError(null); }}
-            className={subTab === tab.id ? 'btn-primary' : 'btn-secondary'}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', padding: '8px 14px' }}
+            className={`nav-tab-item ${subTab === tab.id ? 'active' : ''}`}
           >
             {tab.icon} {tab.label}
           </button>
@@ -529,38 +547,38 @@ export default function FeeManager({ schoolId, students = [] }) {
             </h4>
 
             {overview?.recent_payments && overview.recent_payments.length > 0 ? (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+                <table className="data-table">
                   <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-color)', textAlign: 'left', color: 'var(--text-muted)' }}>
-                      <th style={{ padding: '10px' }}>Receipt #</th>
-                      <th style={{ padding: '10px' }}>Student Name</th>
-                      <th style={{ padding: '10px' }}>Class</th>
-                      <th style={{ padding: '10px' }}>Amount Paid</th>
-                      <th style={{ padding: '10px' }}>Mode</th>
-                      <th style={{ padding: '10px' }}>Date</th>
-                      <th style={{ padding: '10px', textAlign: 'right' }}>Action</th>
+                    <tr>
+                      <th>Receipt #</th>
+                      <th>Student Name</th>
+                      <th>Class</th>
+                      <th>Amount Paid</th>
+                      <th>Mode</th>
+                      <th>Date</th>
+                      <th style={{ textAlign: 'right' }}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {overview.recent_payments.map((p) => (
-                      <tr key={p.receipt_no} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <td style={{ padding: '10px', fontWeight: 700, color: 'var(--primary)' }}>{p.receipt_no}</td>
-                        <td style={{ padding: '10px', fontWeight: 600 }}>{p.student_name}</td>
-                        <td style={{ padding: '10px' }}>Grade {p.grade}-{p.section}</td>
-                        <td style={{ padding: '10px', fontWeight: 700, color: '#16a34a' }}>₹{p.amount.toLocaleString('en-IN')}</td>
-                        <td style={{ padding: '10px' }}>
-                          <span className="pill pill-primary" style={{ fontSize: '10px' }}>{p.mode}</span>
+                      <tr key={p.receipt_no}>
+                        <td style={{ fontWeight: 700, color: 'var(--primary)' }}>{p.receipt_no}</td>
+                        <td style={{ fontWeight: 600 }}>{p.student_name}</td>
+                        <td>Grade {p.grade}-{p.section}</td>
+                        <td style={{ fontWeight: 700, color: '#16a34a' }}>₹{p.amount.toLocaleString('en-IN')}</td>
+                        <td>
+                          <span className="pill pill-primary" style={{ fontSize: '10.5px' }}>{p.mode}</span>
                         </td>
-                        <td style={{ padding: '10px', color: 'var(--text-muted)' }}>{p.date}</td>
-                        <td style={{ padding: '10px', textAlign: 'right' }}>
+                        <td style={{ color: 'var(--text-muted)' }}>{p.date}</td>
+                        <td style={{ textAlign: 'right' }}>
                           <button
                             onClick={async () => {
                               const r = await api.getFeeReceipt(p.receipt_no);
                               setPrintedReceipt(r);
                             }}
                             className="btn-secondary"
-                            style={{ padding: '4px 8px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                            style={{ padding: '4px 10px', fontSize: '11.5px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                           >
                             <Printer size={12} /> Print
                           </button>
@@ -1217,83 +1235,84 @@ export default function FeeManager({ schoolId, students = [] }) {
           )}
 
           {/* ── FEE STRUCTURES ROSTER TABLE ── */}
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid var(--border-color)', textAlign: 'left', color: 'var(--text-muted)' }}>
-                <th style={{ padding: '10px' }}>Grade</th>
-                <th style={{ padding: '10px' }}>Fee Head Component</th>
-                <th style={{ padding: '10px' }}>Installment Term</th>
-                <th style={{ padding: '10px' }}>Amount</th>
-                <th style={{ padding: '10px' }}>Due Date</th>
-                <th style={{ padding: '10px' }}>Late Penalty Rule</th>
-                <th style={{ padding: '10px', textAlign: 'right' }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStructures.map((s) => (
-                <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '10px', fontWeight: 700 }}>Class {s.grade}</td>
-                  <td style={{ padding: '10px', fontWeight: 600, color: '#0f172a' }}>
-                    <span style={{ marginRight: '6px' }}>
-                      {STANDARD_FEE_HEADS.find(h => h.name === s.fee_head)?.icon || '📌'}
-                    </span>
-                    {s.fee_head}
-                  </td>
-                  <td style={{ padding: '10px', color: '#334155' }}>{s.installment_name}</td>
-                  <td style={{ padding: '10px', fontWeight: 700, color: 'var(--primary)' }}>
-                    ₹{s.total_amount?.toLocaleString('en-IN')}
-                  </td>
-                  <td style={{ padding: '10px', color: 'var(--text-muted)' }}>{s.due_date}</td>
-                  <td style={{ padding: '10px', fontSize: '11.5px', color: '#64748b' }}>
-                    ₹{s.late_fine_per_day}/day after {s.grace_period_days}d
-                  </td>
-                  <td style={{ padding: '10px', textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', gap: '6px' }}>
-                      <button onClick={() => handleOpenEditStructure(s)} className="btn-secondary" style={{ padding: '4px 8px', color: 'var(--primary)' }} title="Edit Structure">
-                        <Edit2 size={13} />
-                      </button>
-                      <button onClick={() => handleDeleteStructure(s.id)} className="btn-secondary" style={{ padding: '4px 8px', color: '#ef4444' }} title="Delete Structure">
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {filteredStructures.length === 0 && (
+          <div style={{ overflowX: 'auto', background: '#ffffff', borderRadius: '12px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <td colSpan="7" style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                    No fee structures found. Click <strong>"Create Fee Schedule"</strong> to generate Monthly, Quarterly, or Annual schedules.
-                  </td>
+                  <th>Grade</th>
+                  <th>Fee Head Component</th>
+                  <th>Installment Term</th>
+                  <th>Amount</th>
+                  <th>Due Date</th>
+                  <th>Late Penalty Rule</th>
+                  <th style={{ textAlign: 'right' }}>Action</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredStructures.map((s) => (
+                  <tr key={s.id}>
+                    <td style={{ fontWeight: 700 }}>Class {s.grade}</td>
+                    <td style={{ fontWeight: 600, color: '#0f172a' }}>
+                      <span style={{ marginRight: '6px' }}>
+                        {STANDARD_FEE_HEADS.find(h => h.name === s.fee_head)?.icon || '📌'}
+                      </span>
+                      {s.fee_head}
+                    </td>
+                    <td style={{ color: '#334155' }}>{s.installment_name}</td>
+                    <td style={{ fontWeight: 700, color: 'var(--primary)' }}>
+                      ₹{s.total_amount?.toLocaleString('en-IN')}
+                    </td>
+                    <td style={{ color: 'var(--text-muted)' }}>{s.due_date}</td>
+                    <td style={{ fontSize: '12px', color: '#64748b' }}>
+                      ₹{s.late_fine_per_day}/day after {s.grace_period_days}d
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <div style={{ display: 'inline-flex', gap: '6px' }}>
+                        <button onClick={() => handleOpenEditStructure(s)} className="btn-secondary" style={{ padding: '5px 9px', color: 'var(--primary)' }} title="Edit Structure">
+                          <Edit2 size={13} />
+                        </button>
+                        <button onClick={() => handleDeleteStructure(s.id)} className="btn-secondary" style={{ padding: '5px 9px', color: '#ef4444' }} title="Delete Structure">
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {filteredStructures.length === 0 && (
+                  <tr>
+                    <td colSpan="7" style={{ padding: '36px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                      No fee structures found. Click <strong>"Create Fee Schedule"</strong> to generate Monthly, Quarterly, or Annual schedules.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* ── SUB-TAB 4: GATEWAY CONFIG ── */}
       {subTab === 'config' && (
-        <div className="tech-card" style={{ padding: '24px', maxWidth: '750px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <h4 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+        <div className="tech-card" style={{ padding: '32px 36px', maxWidth: '840px', margin: '0 auto', boxShadow: '0 4px 20px -2px rgba(0,0,0,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+            <h4 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
               Multi-Tenant Payment Gateway & School UPI Configuration
             </h4>
             <span className="pill pill-emerald" style={{ fontSize: '11px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <Lock size={11} /> AES-256 Vault Encrypted
+              <Lock size={12} /> AES-256 Vault Encrypted
             </span>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '20px' }}>
+          <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginBottom: '22px' }}>
             Configure merchant keys for online fee collection and parent PWA checkout. Secrets are encrypted at rest.
           </p>
 
-          <form onSubmit={handleSaveConfig} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <form onSubmit={handleSaveConfig} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ fontSize: '12px', fontWeight: 600 }}>Payment Gateway Provider</label>
+              <label className="form-label">Payment Gateway Provider</label>
               <select
                 value={configForm.gateway_provider}
                 onChange={(e) => setConfigForm({ ...configForm, gateway_provider: e.target.value })}
-                className="input-field"
-                style={{ width: '100%', marginTop: '4px' }}
+                className="form-input"
               >
                 <option value="MANUAL">Manual Offline / Counter Cashier</option>
                 <option value="RAZORPAY">Razorpay (India UPI, Cards, NetBanking)</option>
@@ -1301,117 +1320,114 @@ export default function FeeManager({ schoolId, students = [] }) {
               </select>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600 }}>School Official UPI VPA</label>
+                <label className="form-label">School Official UPI VPA *</label>
                 <input
                   type="text"
                   placeholder="e.g. greenwood@hdfcbank"
                   value={configForm.upi_vpa}
                   onChange={(e) => setConfigForm({ ...configForm, upi_vpa: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', marginTop: '4px' }}
+                  className="form-input"
                   required
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600 }}>UPI Beneficiary Account Name</label>
+                <label className="form-label">UPI Beneficiary Account Name *</label>
                 <input
                   type="text"
                   placeholder="e.g. Greenwood High Fee Account"
                   value={configForm.upi_account_name}
                   onChange={(e) => setConfigForm({ ...configForm, upi_account_name: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', marginTop: '4px' }}
+                  className="form-input"
                   required
                 />
               </div>
             </div>
 
             {/* School Bank Account & QR Code (Shown in Parent App) */}
-            <div style={{ padding: '14px', borderRadius: '10px', background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#166534', marginBottom: '4px' }}>
-                🏦 School Bank Account & Payment QR (Direct Transfer / Offline Deposit)
+            <div style={{ padding: '20px', borderRadius: '12px', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>🏦</span> Direct Bank Transfer & Official Payment QR
+                </div>
+                <span className="pill pill-emerald" style={{ fontSize: '10.5px' }}>Parent App & Portal</span>
               </div>
-              <p style={{ fontSize: '11.5px', color: '#15803d', margin: '0 0 12px 0' }}>
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '0 0 16px 0' }}>
                 These details are displayed directly in the Parent Portal & Mobile App so parents can pay via NEFT/IMPS or scan your school's QR code.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Bank Name</label>
+                  <label className="form-label">Bank Name</label>
                   <input
                     type="text"
                     placeholder="e.g. State Bank of India, HDFC"
                     value={configForm.bank_name || ''}
                     onChange={(e) => setConfigForm({ ...configForm, bank_name: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', marginTop: '4px', background: '#fff' }}
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Account Number</label>
+                  <label className="form-label">Account Number</label>
                   <input
                     type="text"
                     placeholder="e.g. 50200012345678"
                     value={configForm.bank_account_no || ''}
                     onChange={(e) => setConfigForm({ ...configForm, bank_account_no: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', marginTop: '4px', background: '#fff' }}
+                    className="form-input"
                   />
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
                 <div>
-                  <label style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>IFSC Code</label>
+                  <label className="form-label">IFSC Code</label>
                   <input
                     type="text"
                     placeholder="e.g. SBIN0001234"
                     value={configForm.bank_ifsc || ''}
                     onChange={(e) => setConfigForm({ ...configForm, bank_ifsc: e.target.value.toUpperCase() })}
-                    className="input-field"
-                    style={{ width: '100%', marginTop: '4px', background: '#fff' }}
+                    className="form-input"
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Beneficiary / Account Holder Name</label>
+                  <label className="form-label">Beneficiary / Account Holder Name</label>
                   <input
                     type="text"
                     placeholder="e.g. Greenwood High Educational Trust"
                     value={configForm.bank_account_holder || ''}
                     onChange={(e) => setConfigForm({ ...configForm, bank_account_holder: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', marginTop: '4px', background: '#fff' }}
+                    className="form-input"
                   />
                 </div>
               </div>
 
-              <div style={{ marginBottom: '14px', background: '#f0fdf4', padding: '12px 14px', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>School Payment UPI QR Code Image</label>
+              <div style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label className="form-label" style={{ margin: 0 }}>School Payment UPI QR Code Image</label>
                   {configForm.qr_code_url && (
                     <span className="pill pill-emerald" style={{ fontSize: '10px', fontWeight: 700 }}>
-                      ✓ QR Code Image Attached
+                      ✓ QR Code Image Active
                     </span>
                   )}
                 </div>
 
                 <div style={{
                   background: '#ffffff',
-                  border: configForm.qr_code_url ? '1.5px solid #86efac' : '2px dashed #86efac',
-                  borderRadius: '8px',
-                  padding: '12px 14px',
+                  border: configForm.qr_code_url ? '1.5px solid #86efac' : '2px dashed #cbd5e1',
+                  borderRadius: '10px',
+                  padding: '14px 18px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
                   gap: '12px'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                     {configForm.qr_code_url ? (
-                      <div style={{ width: '64px', height: '64px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #cbd5e1', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '64px', height: '64px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #cbd5e1', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <img
                           src={configForm.qr_code_url.startsWith('http') ? configForm.qr_code_url : `${API_BASE}${configForm.qr_code_url}`}
                           alt="School Payment QR"
@@ -1420,15 +1436,15 @@ export default function FeeManager({ schoolId, students = [] }) {
                         />
                       </div>
                     ) : (
-                      <div style={{ width: '44px', height: '44px', borderRadius: '8px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
-                        <Upload size={20} />
+                      <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#eef2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                        <QrCode size={22} />
                       </div>
                     )}
                     <div>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#166534' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
                         {configForm.qr_code_url ? 'Official Payment QR Active' : 'Upload School UPI QR Image'}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
                         PNG, JPG, or WebP format (Rendered inside Parent App for instant UPI scanning)
                       </div>
                     </div>
@@ -1438,8 +1454,8 @@ export default function FeeManager({ schoolId, students = [] }) {
                     <label
                       className="btn-primary"
                       style={{
-                        fontSize: '11.5px',
-                        padding: '7px 12px',
+                        fontSize: '12px',
+                        padding: '7px 14px',
                         cursor: 'pointer',
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -1463,7 +1479,7 @@ export default function FeeManager({ schoolId, students = [] }) {
                         type="button"
                         onClick={() => setConfigForm({ ...configForm, qr_code_url: '' })}
                         className="btn-secondary"
-                        style={{ fontSize: '11px', padding: '7px 10px', color: '#dc2626' }}
+                        style={{ fontSize: '11.5px', padding: '7px 12px', color: '#dc2626' }}
                         title="Remove uploaded QR code"
                       >
                         Remove
@@ -1474,49 +1490,47 @@ export default function FeeManager({ schoolId, students = [] }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '11.5px', fontWeight: 600, color: '#166534' }}>Payment Instructions for Parents</label>
+                <label className="form-label">Payment Instructions for Parents</label>
                 <textarea
-                  placeholder="e.g. Please mention Student Admission Number in transfer remarks and submit UTR to school office."
+                  placeholder="e.g. Please mention Student Admission Number in transfer remarks and submit UTR / transaction receipt."
                   value={configForm.payment_instructions || ''}
                   onChange={(e) => setConfigForm({ ...configForm, payment_instructions: e.target.value })}
-                  className="input-field"
+                  className="form-input"
                   rows={2}
-                  style={{ width: '100%', marginTop: '4px', background: '#fff', resize: 'vertical' }}
+                  style={{ resize: 'vertical' }}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600 }}>Merchant API Key / Key ID</label>
+                <label className="form-label">Merchant API Key / Key ID</label>
                 <input
                   type="text"
                   placeholder="rzp_live_... or pk_live_..."
                   value={configForm.merchant_key || ''}
                   onChange={(e) => setConfigForm({ ...configForm, merchant_key: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', marginTop: '4px' }}
+                  className="form-input"
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '12px', fontWeight: 600 }}>Receipt Serial Prefix</label>
+                <label className="form-label">Receipt Serial Prefix *</label>
                 <input
                   type="text"
                   placeholder="e.g. RCP or GWH"
                   value={configForm.receipt_prefix || 'RCP'}
                   onChange={(e) => setConfigForm({ ...configForm, receipt_prefix: e.target.value.toUpperCase() })}
-                  className="input-field"
-                  style={{ width: '100%', marginTop: '4px' }}
+                  className="form-input"
                   required
                 />
               </div>
             </div>
 
             {/* School Fee Receipt Format & Custom Letterhead Uploader */}
-            <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '10px', border: '1px solid #e2e8f0', marginTop: '6px' }}>
+            <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)' }}>
+                <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--text-primary)' }}>
                   School Fee Receipt Format & Official Letterhead
                 </div>
                 {configForm.receipt_template_url && (
@@ -1526,13 +1540,13 @@ export default function FeeManager({ schoolId, students = [] }) {
                 )}
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
-                Upload your school's official letterhead or printed receipt format image. The system will automatically place this authentic header onto all fee receipts and render student particulars, dues, and transaction details.
+                Upload your school's official letterhead image. The system will automatically place this authentic header onto all printed fee receipts and downloadable statements.
               </p>
 
               <div style={{
                 background: '#ffffff',
                 border: configForm.receipt_template_url ? '1.5px solid #bbf7d0' : '2px dashed #cbd5e1',
-                borderRadius: '8px',
+                borderRadius: '10px',
                 padding: '14px 18px',
                 display: 'flex',
                 alignItems: 'center',
@@ -1542,7 +1556,7 @@ export default function FeeManager({ schoolId, students = [] }) {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   {configForm.receipt_template_url ? (
-                    <div style={{ width: '100px', height: '60px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100px', height: '60px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <img
                         src={configForm.receipt_template_url.startsWith('http') ? configForm.receipt_template_url : `${API_BASE}${configForm.receipt_template_url}`}
                         alt="Uploaded School Letterhead"
@@ -1550,14 +1564,14 @@ export default function FeeManager({ schoolId, students = [] }) {
                       />
                     </div>
                   ) : (
-                    <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
-                      <Upload size={22} />
+                    <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                      <Upload size={20} />
                     </div>
                   )}
 
                   <div>
                     <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                      {configForm.receipt_template_url ? 'Official Letterhead / Format Image Attached' : 'Upload School Receipt Letterhead Image'}
+                      {configForm.receipt_template_url ? 'Official Letterhead Format Image Attached' : 'Upload School Receipt Letterhead Image'}
                     </div>
                     <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
                       {configForm.receipt_template_url ? 'Affixed to all cashier POS receipts & downloadable PDF statements' : 'PNG, JPG, or WebP format (School letterhead header banner or full page)'}
@@ -1570,7 +1584,7 @@ export default function FeeManager({ schoolId, students = [] }) {
                     className="btn-primary"
                     style={{
                       fontSize: '12px',
-                      padding: '8px 14px',
+                      padding: '7px 14px',
                       cursor: 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1578,8 +1592,8 @@ export default function FeeManager({ schoolId, students = [] }) {
                       margin: 0
                     }}
                   >
-                    <Upload size={14} />
-                    {uploadingReceiptTemplate ? 'Uploading...' : (configForm.receipt_template_url ? 'Change Letterhead Image' : 'Upload Letterhead Image')}
+                    <Upload size={13} />
+                    {uploadingReceiptTemplate ? 'Uploading...' : (configForm.receipt_template_url ? 'Change Letterhead' : 'Upload Letterhead')}
                     <input
                       type="file"
                       accept="image/*"
@@ -1594,8 +1608,8 @@ export default function FeeManager({ schoolId, students = [] }) {
                       type="button"
                       onClick={() => setConfigForm({ ...configForm, receipt_template_url: '' })}
                       className="btn-secondary"
-                      style={{ fontSize: '12px', padding: '8px 12px', color: '#dc2626' }}
-                      title="Revert to standard verified CBSE template"
+                      style={{ fontSize: '11.5px', padding: '7px 12px', color: '#dc2626' }}
+                      title="Revert to standard verified template"
                     >
                       Remove
                     </button>
@@ -1604,7 +1618,7 @@ export default function FeeManager({ schoolId, students = [] }) {
               </div>
 
               {/* Optional Advanced HTML Format */}
-              <details style={{ marginTop: '10px' }}>
+              <details style={{ marginTop: '12px' }}>
                 <summary style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)', cursor: 'pointer', userSelect: 'none' }}>
                   Advanced: Custom HTML Receipt Format Code (Optional)
                 </summary>
@@ -1614,8 +1628,8 @@ export default function FeeManager({ schoolId, students = [] }) {
                     placeholder="Leave blank for automatic standardized board fee receipt, or paste school HTML receipt template."
                     value={configForm.receipt_template_html || ''}
                     onChange={(e) => setConfigForm({ ...configForm, receipt_template_html: e.target.value })}
-                    className="input-field"
-                    style={{ width: '100%', fontFamily: 'monospace', fontSize: '11.5px' }}
+                    className="form-input"
+                    style={{ fontFamily: 'monospace', fontSize: '11.5px' }}
                   />
                 </div>
               </details>
@@ -1623,21 +1637,21 @@ export default function FeeManager({ schoolId, students = [] }) {
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 600 }}>Merchant Secret Key / Private API Key</label>
+                <label className="form-label" style={{ margin: 0 }}>Merchant Secret Key / Private API Key</label>
                 {configForm.has_secret && (
                   <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 600 }}>
                     ✓ Encrypted in Vault
                   </span>
                 )}
               </div>
-              <div style={{ position: 'relative' }}>
+              <div style={{ position: 'relative', marginTop: '6px' }}>
                 <input
                   type={showSecret ? 'text' : 'password'}
                   placeholder={configForm.has_secret ? '•••••••••••••••• (Leave blank to keep existing secret)' : 'Enter gateway secret key'}
                   value={configForm.merchant_secret || ''}
                   onChange={(e) => setConfigForm({ ...configForm, merchant_secret: e.target.value })}
-                  className="input-field"
-                  style={{ width: '100%', paddingRight: '40px' }}
+                  className="form-input"
+                  style={{ paddingRight: '40px' }}
                 />
                 <button
                   type="button"
@@ -1656,8 +1670,8 @@ export default function FeeManager({ schoolId, students = [] }) {
 
             {/* Live Gateway Connection Diagnostic */}
             <div style={{
-              padding: '14px 16px',
-              borderRadius: '10px',
+              padding: '16px 18px',
+              borderRadius: '12px',
               backgroundColor: '#f8fafc',
               border: '1px solid #e2e8f0',
               marginTop: '4px'
@@ -1667,7 +1681,7 @@ export default function FeeManager({ schoolId, students = [] }) {
                   <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
                     Live Gateway Diagnostic
                   </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                     Test merchant authentication against {configForm.gateway_provider} servers in real-time.
                   </div>
                 </div>
@@ -1676,7 +1690,7 @@ export default function FeeManager({ schoolId, students = [] }) {
                   onClick={handleTestGateway}
                   disabled={testingGateway || configForm.gateway_provider === 'MANUAL'}
                   className="btn-secondary"
-                  style={{ fontSize: '12px', padding: '6px 14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  style={{ fontSize: '12px', padding: '7px 14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
                   <Activity size={14} className={testingGateway ? 'spin' : ''} />
                   {testingGateway ? 'Testing...' : 'Test Gateway Connection'}
@@ -1702,8 +1716,22 @@ export default function FeeManager({ schoolId, students = [] }) {
               )}
             </div>
 
-            <button type="submit" className="btn-primary" style={{ marginTop: '10px', padding: '12px', fontWeight: 700 }}>
-              Save Gateway & UPI Settings
+            <button
+              type="submit"
+              className="btn-primary"
+              style={{
+                marginTop: '10px',
+                padding: '13px',
+                fontWeight: 700,
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%'
+              }}
+            >
+              <ShieldCheck size={18} /> Save Gateway & UPI Settings
             </button>
           </form>
         </div>

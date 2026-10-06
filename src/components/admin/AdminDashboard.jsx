@@ -32,7 +32,16 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboard({ user, onOpenReportCard }) {
-  const [activeTab, setActiveTab] = useState('home'); // 'home' | 'students' | 'faculty' | 'academics' | 'settings'
+  const [activeTab, setActiveTabRaw] = useState(() => {
+    return localStorage.getItem('eduflow_admin_tab') || 'home';
+  });
+
+  const setActiveTab = (tab) => {
+    setActiveTabRaw(tab);
+    try {
+      localStorage.setItem('eduflow_admin_tab', tab);
+    } catch (e) {}
+  };
   const [stats, setStats] = useState(null);
   const [students, setStudents] = useState([]);
   const [teachers, setTeachers] = useState([]);
